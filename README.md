@@ -11,7 +11,6 @@ Due to the 2026 surge in AI datacenter demands, global RAM manufacturing has shi
 
 **RAB** is a specialized price-tracking and arbitrage engine designed to monitor "Spot-Market" volatility across major retailers. It utilizes asynchronous scrapers to identify undervalued inventory and trigger buy signals before retail prices adjust to wholesale spikes.
 
----
 
 ## ✨ Key Features
 * **Asynchronous Scraping:** Powered by Playwright to handle JavaScript-heavy retail sites without blocking the API.
@@ -19,7 +18,6 @@ Due to the 2026 surge in AI datacenter demands, global RAM manufacturing has shi
 * **Modern Tooling:** Built with **uv** for lightning-fast dependency resolution and virtual environment management.
 * **Scalable Core:** Modular scraper architecture allowing for easy integration of new retailers (Newegg, Amazon, MicroCenter).
 
----
 
 ## 🏗️ Technical Architecture
 
@@ -27,7 +25,6 @@ Due to the 2026 surge in AI datacenter demands, global RAM manufacturing has shi
 2.  **Scraper Base:** An extensible class that manages browser contexts and anti-detection headers.
 3.  **Engine Logic (Pending):** Calculates the "Arbitrage Signal" based on historical price averages and inventory levels.
 
----
 
 ## 🛠️ Installation & Setup
 
@@ -35,7 +32,7 @@ This project uses [uv](https://github.com/astral-sh/uv) for high-performance Pyt
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/yourusername/ram-arbitrage-bot.git](https://github.com/yourusername/ram-arbitrage-bot.git)
+   git clone https://github.com/yourusername/ram-arbitrage-bot.git
    cd ram-arbitrage-bot
    ```
 
@@ -52,7 +49,6 @@ This project uses [uv](https://github.com/astral-sh/uv) for high-performance Pyt
     ```bash
     uv run uvicorn app.main:app --reload
     ```
----
 
 ## 📡 API Endpoints
 
@@ -62,7 +58,6 @@ This project uses [uv](https://github.com/astral-sh/uv) for high-performance Pyt
 | `POST` | `/scan?url={url}` | Trigger a background price scrape. |
 | `GET` | `/results` | View all successfully scraped data points. |
 
----
 
 ## 🗺️ Roadmap
 - [x] **Phase 1:** Initial FastAPI Heartbeat & Base Scraper.
@@ -70,6 +65,7 @@ This project uses [uv](https://github.com/astral-sh/uv) for high-performance Pyt
 - [ ] **Phase 3:** Integrate SQLAlchemy (SQLite/Postgres) for price history persistence.
 - [ ] **Phase 4:** Add "Arbitrage Alert" notifications via Discord/Telegram.
 - [ ] **Phase 5:** Build a React/Next.js dashboard for visual price-velocity tracking.
+
 
 ## 📄 License
 MIT License - See [LICENSE](LICENSE) for details.
