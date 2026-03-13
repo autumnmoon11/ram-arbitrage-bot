@@ -1,6 +1,15 @@
 # .gitignore
+# Local Database
+*.db
+*.sqlite3
+
+# Python Environment
 .env
 __pycache__/
 .venv/
 .pytest_cache/
 test-results/
+*.py[cod]
+
+# Playwright/Browser binaries
+.browser/

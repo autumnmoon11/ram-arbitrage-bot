@@ -9,6 +9,7 @@ dependencies = [
     "playwright>=1.58.0",
     "pydantic-settings>=2.13.1",
     "sqlalchemy>=2.0.48",
+    "sqlmodel>=0.0.37",
     "uvicorn>=0.41.0",
 ]
 
