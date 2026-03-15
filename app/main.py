@@ -11,6 +11,7 @@ from app.database import init_db, engine
 from app.models import PricePoint
 from app.scrapers.base import BaseScraper
 from app.scrapers.newegg import NeweggScraper
+from app.scrapers.amazon import AmazonScraper
 
 # Windows Proactor Fix (Crucial for Playwright)
 if sys.platform == 'win32':
@@ -32,7 +33,15 @@ def run_isolated_scrape(url: str):
         asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
     try:
-        scraper = NeweggScraper()
+        # Routing Logic
+        if "amazon.com" in url or "amzn.to" in url:
+            scraper = AmazonScraper()
+        elif "newegg.com" in url:
+            scraper = NeweggScraper()
+        else:
+            print("Unsupported Retailer")
+            return
+        
         data = asyncio.run(scraper.get_ram_details(url))
         
         if "error" in data:
@@ -64,10 +73,12 @@ def read_root():
 async def trigger_scan(url: str, background_tasks: BackgroundTasks):
     """Trigger a background RAM price check."""
     # Early Validation: Check if we support this site
-    if "newegg.com" not in url:
+    allowed_domains = ["newegg.com", "amazon.com", "amzn.to"]
+    
+    if not any(domain in url for domain in allowed_domains):
         raise HTTPException(
             status_code=400, 
-            detail="Currently, only Newegg URLs are supported for RAM scanning."
+            detail="Supported retailers: Newegg, Amazon."
         )
     background_tasks.add_task(run_isolated_scrape, url)
     return {"status": "accepted", "message": f"Scan started for {url}"}
