@@ -1,6 +1,6 @@
 # app/models/price_point.py
 from sqlmodel import SQLModel, Field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 class PricePoint(SQLModel, table=True):
@@ -10,4 +10,6 @@ class PricePoint(SQLModel, table=True):
     price: float
     in_stock: bool
     url: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
