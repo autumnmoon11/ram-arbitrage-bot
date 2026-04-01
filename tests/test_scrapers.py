@@ -1,5 +1,6 @@
 import pytest
 import re
+from app.scrapers.newegg import NeweggScraper
 
 def clean_price(price_str: str) -> float:
     """Helper to test regex logic across scrapers"""
@@ -29,3 +30,21 @@ def test_ram_product_matching_logic():
     amazon_title = "Corsair Vengeance DDR5 32GB 2x16GB 6000Mhz"
     
     assert normalize_ram_title(newegg_title) == normalize_ram_title(amazon_title)
+
+def test_is_valid_model_logic():
+    scraper = NeweggScraper()
+    assert scraper._is_valid_model("CMK32GX5M2B6000C38") is True
+    
+    # These should now correctly return False
+    assert scraper._is_valid_model("DDR5-MEMORY") is False 
+    assert scraper._is_valid_model("12345") is False 
+
+def test_model_extraction_regex_variants():
+    # Updated pattern to handle colons and varied spacing
+    pattern = r'(?i)model:?\s*([A-Z0-9-]+)'
+    
+    title_1 = "CORSAIR Vengeance 32GB Model CMK32GX5M2B6000C38"
+    assert re.search(pattern, title_1).group(1) == "CMK32GX5M2B6000C38"
+    
+    title_2 = "G.SKILL Trident Z5 Model:F5-6000J3038F16GX2-TZ5NR"
+    assert re.search(pattern, title_2).group(1) == "F5-6000J3038F16GX2-TZ5NR"

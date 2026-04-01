@@ -57,7 +57,8 @@ class NeweggScraper(BaseScraper):
                 return potential
 
         # 2. Check Title via Regex
-        match = re.search(r'(?i)model\s+([A-Z0-9-]+)', title)
+        pattern = r'(?i)model:?\s*([A-Z0-9-]+)'
+        match = re.search(pattern, title)
         if match:
             return match.group(1)
 
@@ -66,5 +67,7 @@ class NeweggScraper(BaseScraper):
         return url_match.group(0) if url_match else "UNKNOWN"
 
     def _is_valid_model(self, text):
-        """Validation logic for RAM part numbers."""
-        return bool(re.search(r'[A-Z].*\d|\d.*[A-Z]', text)) and len(text) >= 8
+        if not text or any(word in text.upper() for word in ["MEMORY", "RAM", "KIT"]):
+            return False
+        # Require at least 8 chars and a mix of letters/numbers
+        return bool(re.search(r'[A-Z].*\d|\d.*[A-Z]', text)) and len(text) >= 10
