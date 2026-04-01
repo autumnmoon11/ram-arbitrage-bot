@@ -7,6 +7,7 @@ class PricePoint(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     retailer: str
     product_name: str
+    model_number: str = Field(index=True)
     price: float
     in_stock: bool
     url: str

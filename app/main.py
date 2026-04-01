@@ -49,9 +49,25 @@ def run_isolated_scrape(url: str):
             return
 
         with Session(engine) as session:
+            # 1. Find ALL previous entries for this URL that are still "UNKNOWN"
+            statement = select(PricePoint).where(
+                PricePoint.url == url, 
+                PricePoint.model_number == "UNKNOWN"
+            )
+            results = session.exec(statement).all() # Change .first() to .all()
+
+            # 2. Bulk Heal: Update all of them
+            if results and data["model_number"] != "UNKNOWN":
+                for old_entry in results:
+                    old_entry.model_number = data["model_number"]
+                    session.add(old_entry)
+                print(f"FIXED: Updated {len(results)} UNKNOWN records for {url}")
+
+            # 3. Always add a NEW PricePoint to preserve price history over time
             new_entry = PricePoint(
                 retailer=data["retailer"],
                 product_name=data["product_name"],
+                model_number=data.get("model_number", "UNKNOWN"),
                 price=data["price"],
                 in_stock=data["in_stock"],
                 url=data["url"]
